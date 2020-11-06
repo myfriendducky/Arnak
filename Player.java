@@ -1,8 +1,15 @@
 package arnak;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class Player
 {
-	String playerName;
+	ArrayList<Card> deck = new ArrayList<Card>();
+	ArrayList<Card> hand = new ArrayList<Card>();
+	ArrayList<Card> playArea = new ArrayList<Card>();
+	
+	String name;
 	int playOrder;
 	boolean hasPassed;
 	
@@ -11,11 +18,12 @@ public class Player
 	int numTablet;
 	int numArrowhead;
 	int numJewel;
+	int numArchaeologist;
 	
-	public Player(String newName, int newPlayOrder)
+	public Player(String playerName, int order)
 	{
-		playerName = newName;
-		playOrder = newPlayOrder;
+		name = playerName;
+		playOrder = order;
 		hasPassed = false;
 		
 		numCoin = 0;
@@ -23,11 +31,71 @@ public class Player
 		numTablet = 0;
 		numArrowhead = 0;
 		numJewel = 0;
+		numArchaeologist = 2;
 	}
 	
-	public String getPlayerName()
+	public void dig()
 	{
-		return playerName;
+		
+	}
+	
+	public void addToDeck(Card card, String position)
+	{
+		if(position == "top")
+		{
+			deck.add(0, card);
+		}
+		else if(position == "bottom")
+		{
+			deck.add(card);
+		}
+	}
+	
+	public void addToPlayArea(Card card)
+	{
+		playArea.add(card);
+	}
+	
+	public void addToHand(Card card)
+	{
+		hand.add(card);
+	}
+	
+	public void shuffle(String target)
+	{
+		if(target == "deck")
+		{
+			Collections.shuffle(deck);
+		}
+		else if(target == "play area")
+		{
+			Collections.shuffle(playArea);
+		}
+	}
+	
+	public void draw(int numCard)
+	{
+		for(int i = 0; i < numCard; i++)
+		{
+			hand.add(deck.get(0));
+			deck.remove(0);
+		}
+	}
+	
+	public void discard(int i)
+	{
+		playArea.add(hand.get(i));
+		hand.remove(i);
+	}
+	
+	public Card getCard(int i)
+	{
+		return hand.get(i);
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public int getPlayOrder()
@@ -55,30 +123,38 @@ public class Player
 			return numCompass;
 		case "tablet":
 			return numTablet;
+		case "arrowhead":
+			return numArrowhead;
 		case "jewel":
 			return numJewel;
+		case "archaeologist":
+			return numArchaeologist;
 		default:
 			break;
 		}
 		return 0;
 	}
 	
-	public void setResource(String resource, int amountToAdd)
+	public void addResource(String resource, int amount)
 	{
 		switch(resource)
 		{
 		case "coin":
-			numCoin += amountToAdd;
+			numCoin += amount;
 			break;
 		case "compass":
-			numCompass += amountToAdd;
+			numCompass += amount;
 			break;
 		case "tablet":
-			numTablet += amountToAdd;
+			numTablet += amount;
 			break;
+		case "arrowhead":
+			numArrowhead += amount;
 		case "jewel":
-			numJewel += amountToAdd;
+			numJewel += amount;
 			break;
+		case "archaeologist":
+			numArchaeologist += amount;
 		default:
 			break;
 		}
