@@ -83,9 +83,14 @@ public class Player
 		hand.remove(i);
 	}
 	
-	public Card getCard(int i)
+	public Card cardAt(int i)
 	{
 		return hand.get(i);
+	}
+	
+	public int handSize()
+	{
+		return hand.size();
 	}
 	
 	public String getName()
