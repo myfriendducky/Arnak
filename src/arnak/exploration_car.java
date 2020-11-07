@@ -12,9 +12,4 @@ public class exploration_car extends Card
 		
 		freeAction = true;
 	}
-	
-	public void useEffect()
-	{
-		player.addResource("exploration", 1);
-	}
 }
