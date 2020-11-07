@@ -4,8 +4,8 @@ public class baseSite_3 extends Site
 {
 	public baseSite_3()
 	{
-		setupSpaces("b");
-		setupSpaces("bb");
+		addSpace("w");
+		addSpace("ww");
 	}
 	
 	public void resolveEffect()

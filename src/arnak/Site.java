@@ -1,13 +1,10 @@
 package arnak;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Site
 {
 	Player activePlayer;
-	
-	int numSpace;
 	
 	ArrayList<String> travelCost = new ArrayList<String>();
 	ArrayList<Player> occupyingPlayers = new ArrayList<Player>();
@@ -16,18 +13,17 @@ public class Site
 	{
 	}
 	
-	public void setupSpaces(String cost)
+	protected void addSpace(String cost)
 	{
 		travelCost.add(cost);
 		occupyingPlayers.add(null);
-		numSpace++;
 	}
 	
 	public String getTravelCost()
 	{
-		if(occupyingPlayers.size() < numSpace)
+		if(numPlayer() < maxSpace())
 		{
-			for(int i = 0; i < travelCost.size(); i++)
+			for(int i = 0; i < maxSpace(); i++)
 			{
 				if(occupyingPlayers.get(i) == null)
 				{
@@ -39,54 +35,38 @@ public class Site
 		return null;
 	}
 	
-	public void addPlayer(Player player, ArrayList<Integer> cardsToUse)
+	public int numPlayer()
 	{
-		if(occupyingPlayers.size() < numSpace && player.getResource("archaeologist") > 0)
+		int playerCount = 0;
+		
+		for(int i = 0; i < occupyingPlayers.size(); i++)
+		{
+			if(occupyingPlayers.get(i) != null)
+			{
+				playerCount++;
+			}
+		}
+		
+		return playerCount;
+	}
+	
+	public int maxSpace()
+	{
+		return travelCost.size();
+	}
+	
+	public void addPlayer(Player player)
+	{
+		if(numPlayer() < maxSpace() && player.getResource("archaeologist") > 0)
 		{
 			activePlayer = player;
+			player.addResource("archaeologist", -1);
 			
-			String accumulatedTotal = "";
-			for(int i = 0; i < cardsToUse.size(); i++)
+			for(int i = 0; i < numPlayer(); i++)
 			{
-				accumulatedTotal += player.getCard(cardsToUse.get(i)).getTravelValue();
-			}
-			
-			char tempAccumulated[] = accumulatedTotal.toCharArray();
-			char tempActualCost[] = getTravelCost().toCharArray();
-			
-			Arrays.sort(tempAccumulated);
-			Arrays.sort(tempActualCost);
-			
-			int startHere = 0;
-			int counter = 0;
-			for(int i = 0; i < tempActualCost.length; i++)
-			{
-				for(int j = startHere; j < tempAccumulated.length; j++)
+				if(occupyingPlayers.get(i) == null)
 				{
-					if(tempActualCost[i] == tempAccumulated[j])
-					{
-						startHere = j + 1;
-						counter++;
-						break;
-					}
-				}
-			}
-		
-			if(counter == tempActualCost.length)
-			{
-				for(int i = 0; i < cardsToUse.size(); i++)
-				{
-					player.discard(cardsToUse.get(i));
-				}
-				
-				player.addResource("archaeologist", -1);
-				
-				for(int i = 0; i < occupyingPlayers.size(); i++)
-				{
-					if(occupyingPlayers.get(i) == null)
-					{
-						occupyingPlayers.add(i, player);
-					}
+					occupyingPlayers.add(i, player);
 				}
 			}
 		}
