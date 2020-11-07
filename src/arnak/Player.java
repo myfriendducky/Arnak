@@ -34,11 +34,6 @@ public class Player
 		numArchaeologist = 2;
 	}
 	
-	public void dig()
-	{
-		
-	}
-	
 	public void addToDeck(Card card, String position)
 	{
 		if(position == "top")
