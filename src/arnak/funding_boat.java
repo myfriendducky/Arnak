@@ -12,9 +12,4 @@ public class funding_boat extends Card
 		
 		freeAction = true;
 	}
-	
-	public void useEffect()
-	{
-		player.addResource("coin", 1);
-	}
 }
