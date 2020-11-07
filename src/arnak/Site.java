@@ -19,6 +19,11 @@ public class Site
 		occupyingPlayers.add(null);
 	}
 	
+	public int maxSpace()
+	{
+		return travelCost.size();
+	}
+	
 	public String getTravelCost()
 	{
 		if(numPlayer() < maxSpace())
@@ -50,11 +55,6 @@ public class Site
 		return playerCount;
 	}
 	
-	public int maxSpace()
-	{
-		return travelCost.size();
-	}
-	
 	public void addPlayer(Player player)
 	{
 		if(numPlayer() < maxSpace() && player.getResource("archaeologist") > 0)
@@ -76,5 +76,10 @@ public class Site
 	{
 		occupyingPlayers.get(i).addResource("archaeologist", 1);
 		occupyingPlayers.add(i, null);
+	}
+	
+	public ArrayList<Player> getOccupyingPlayers()
+	{
+		return occupyingPlayers;
 	}
 }
