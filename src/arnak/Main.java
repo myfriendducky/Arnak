@@ -11,43 +11,47 @@ public class Main
 		//System.out.println(a.getTravelValue());
 		
 		Board c = new Board();
-		BoardData b;
+		int b;
 		
 		b = c.pickItemCard(2);	
+		System.out.println("--------------------------------");
 		System.out.println("Card Deck");
-		for (int x=0; x < b.itemCardDeckLeft.size(); x++)
-			System.out.println(b.itemCardDeckLeft.get(x));
+		for (int x=0; x < c.getItemCardDeck().size(); x++)
+			System.out.println(c.getItemCardDeck().get(x));
 		System.out.println();
 		System.out.println("Card Row");
-		for (int x=0; x < b.itemCardRowLeft.size(); x++)
-			System.out.println(b.itemCardRowLeft.get(x));
+		for (int x=0; x < c.getItemCardRow().size(); x++)
+			System.out.println(c.getItemCardRow().get(x));
 		System.out.println();
 		System.out.println("Picked Card");
-		System.out.println(b.pickedCard);
+		System.out.println(b);
 		
 		b = c.pickItemCard(2);	
+		System.out.println("--------------------------------");
 		System.out.println("Card Deck");
-		for (int x=0; x < b.itemCardDeckLeft.size(); x++)
-			System.out.println(b.itemCardDeckLeft.get(x));
+		for (int x=0; x < c.getItemCardDeck().size(); x++)
+			System.out.println(c.getItemCardDeck().get(x));
 		System.out.println();
 		System.out.println("Card Row");
-		for (int x=0; x < b.itemCardRowLeft.size(); x++)
-			System.out.println(b.itemCardRowLeft.get(x));
+		for (int x=0; x < c.getItemCardRow().size(); x++)
+			System.out.println(c.getItemCardRow().get(x));
 		System.out.println();
 		System.out.println("Picked Card");
-		System.out.println(b.pickedCard);
+		System.out.println(b);
 		
-		b = c.pickItemCard(4);	
+		b = c.pickItemCard(2);	
+		System.out.println("--------------------------------");
 		System.out.println("Card Deck");
-		for (int x=0; x < b.itemCardDeckLeft.size(); x++)
-			System.out.println(b.itemCardDeckLeft.get(x));
+		for (int x=0; x < c.getItemCardDeck().size(); x++)
+			System.out.println(c.getItemCardDeck().get(x));
 		System.out.println();
 		System.out.println("Card Row");
-		for (int x=0; x < b.itemCardRowLeft.size(); x++)
-			System.out.println(b.itemCardRowLeft.get(x));
+		for (int x=0; x < c.getItemCardRow().size(); x++)
+			System.out.println(c.getItemCardRow().get(x));
 		System.out.println();
 		System.out.println("Picked Card");
-		System.out.println(b.pickedCard);
+		System.out.println(b);
+		
 
 
 	}

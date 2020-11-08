@@ -4,17 +4,17 @@ import java.util.LinkedList;
 
 public class Board
 {
-	int numOfCoinLeft;
-	int numOfCompassLeft;
-	int numOfTabletLeft;
-	int numOfArrowheadLeft;
-	int numOfJewelLeft;
-	int numOfArchaeologistLeft;
+	private int numOfCoinLeft;
+	private int numOfCompassLeft;
+	private int numOfTabletLeft;
+	private int numOfArrowheadLeft;
+	private int numOfJewelLeft;
+	private int numOfArchaeologistLeft;
 	
-	LinkedList<Integer> itemCardDeck=new LinkedList<Integer>();
-	LinkedList<Integer> itemCardRow=new LinkedList<Integer>();
-	LinkedList<Integer> artifactsCardDeck=new LinkedList<Integer>();
-	LinkedList<Integer> artifactsCardRow=new LinkedList<Integer>();
+	private LinkedList<Integer> itemCardDeck=new LinkedList<Integer>();
+	private LinkedList<Integer> itemCardRow=new LinkedList<Integer>();
+	private LinkedList<Integer> artifactsCardDeck=new LinkedList<Integer>();
+	private LinkedList<Integer> artifactsCardRow=new LinkedList<Integer>();
 	
 	
 	public Board() // Initialize
@@ -43,7 +43,7 @@ public class Board
 			artifactsCardRow.add(x);		
 	}
 	
-	public BoardData pickItemCard (int position) {		
+	public int pickItemCard (int position) {		
 		int pickedCard = 0;
 		
 		if (itemCardRow.size() > 0) // Make sure Row Card exist before pick
@@ -53,12 +53,19 @@ public class Board
 				itemCardRow.addLast(itemCardDeck.removeFirst()); // Get new card from Deck and add to tail
 		}
 		
-		return new BoardData (itemCardDeck, itemCardRow, pickedCard);
+		return pickedCard;
 	}
 	
 	public int pickArtifactsCard (int position) {
-		int pickedCard = artifactsCardRow.remove(position); // Remove card from pick position - gap will be filled by shifting of card from tail side
-		artifactsCardRow.addLast(itemCardDeck.removeFirst()); // Get new card from Deck and add to tail
+		int pickedCard = 0;
+		
+		if (artifactsCardRow.size() > 0) // Make sure Row Card exist before pick
+		{
+			pickedCard = artifactsCardRow.remove(position); // Remove card from pick position - gap will be filled by shifting of card from tail side			
+			if (artifactsCardDeck.size() > 0) // Make sure Deck Card exist before pick
+				artifactsCardRow.addLast(artifactsCardDeck.removeFirst()); // Get new card from Deck and add to tail
+		}
+		
 		return pickedCard;
 	}
 	
@@ -111,6 +118,46 @@ public class Board
 			break;
 		}
 	}
+	
+	public int getResource(String resource)
+	{
+		switch(resource)
+		{
+		case "coin":
+			return numOfCoinLeft;
+		case "compass":
+			return numOfCompassLeft;
+		case "tablet":
+			return numOfTabletLeft;
+		case "arrowhead":
+			return numOfArrowheadLeft;
+		case "jewel":
+			return numOfJewelLeft;
+		case "archaeologist":
+			return numOfArchaeologistLeft;
+		default:
+			break;
+		}
+		return 0;
+	}
+	
+	public LinkedList<Integer> getItemCardDeck() {
+		return itemCardDeck;
+	}
+	
+	public LinkedList<Integer> getItemCardRow() {
+		return itemCardRow;
+	}
+	
+	public LinkedList<Integer> getArtifactsCardDeck() {
+		return artifactsCardDeck;
+	}
+	
+	public LinkedList<Integer> getArtifactsCardRow() {
+		return artifactsCardRow;
+	}
+	
+	
 	
 	
 }
