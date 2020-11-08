@@ -40,17 +40,26 @@ public class Board
 		
 		// Populating Artifacts Card Row - 1 cards on row (1st round)
 		for (int x = 35 ; x<=35 ; x++)
-			itemCardRow.add(x);		
+			artifactsCardRow.add(x);		
 	}
 	
-	public void pickItemCard (int position) {
-		itemCardRow.remove(position);
-		itemCardRow.addLast(itemCardDeck.removeFirst());		
+	public BoardData pickItemCard (int position) {		
+		int pickedCard = 0;
+		
+		if (itemCardRow.size() > 0) // Make sure Row Card exist before pick
+		{
+			pickedCard = itemCardRow.remove(position); // Remove card from pick position - gap will be filled by shifting of card from tail side			
+			if (itemCardDeck.size() > 0) // Make sure Deck Card exist before pick
+				itemCardRow.addLast(itemCardDeck.removeFirst()); // Get new card from Deck and add to tail
+		}
+		
+		return new BoardData (itemCardDeck, itemCardRow, pickedCard);
 	}
 	
-	public void pickArtifactsCard (int position) {
-		artifactsCardRow.remove(position);
-		artifactsCardRow.addLast(itemCardDeck.removeFirst());		
+	public int pickArtifactsCard (int position) {
+		int pickedCard = artifactsCardRow.remove(position); // Remove card from pick position - gap will be filled by shifting of card from tail side
+		artifactsCardRow.addLast(itemCardDeck.removeFirst()); // Get new card from Deck and add to tail
+		return pickedCard;
 	}
 	
 	public void addResource(String resource, int amount)
