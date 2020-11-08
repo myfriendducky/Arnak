@@ -1,163 +1,93 @@
-package arnak;
+package arnak_test;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class Board
 {
-	private int numOfCoinLeft;
-	private int numOfCompassLeft;
-	private int numOfTabletLeft;
-	private int numOfArrowheadLeft;
-	private int numOfJewelLeft;
-	private int numOfArchaeologistLeft;
+	Map<String, Integer> resourcesLeft = new HashMap<String, Integer>();
 	
-	private LinkedList<Integer> itemCardDeck=new LinkedList<Integer>();
-	private LinkedList<Integer> itemCardRow=new LinkedList<Integer>();
-	private LinkedList<Integer> artifactsCardDeck=new LinkedList<Integer>();
-	private LinkedList<Integer> artifactsCardRow=new LinkedList<Integer>();
+	ArrayList<Card> items = new ArrayList<Card>();
+	ArrayList<Card> artifacts = new ArrayList<Card>();
 	
+	Card cardRow[] = {null, null, null, null, null, null};
 	
-	public Board() // Initialize
+	ArrayList<ArrayList<Site>> sites = new ArrayList<ArrayList<Site>>();
+	
+	public Board()
 	{
-		numOfCoinLeft = 27;
-		numOfCompassLeft = 27;
-		numOfTabletLeft = 16;
-		numOfArrowheadLeft = 12;
-		numOfJewelLeft = 9;
-		numOfArchaeologistLeft = 0;	
-		
-		// Populating Item Card Deck - 35 cards on deck
-		for (int x = 1 ; x<=35 ; x++)
-			itemCardDeck.add(x);
-		
-		// Populating Item Card Row - 5 cards on row
-		for (int x = 36 ; x<=40 ; x++)
-			itemCardRow.add(x);		
-		
-		// Populating Artifacts Card Deck - 34 cards on deck
-		for (int x = 1 ; x<=34 ; x++)
-			artifactsCardDeck.add(x);
-		
-		// Populating Artifacts Card Row - 1 cards on row (1st round)
-		for (int x = 35 ; x<=35 ; x++)
-			artifactsCardRow.add(x);		
+		resourcesLeft.put("coin", 27);
+		resourcesLeft.put("compass", 27);
+		resourcesLeft.put("tablet", 16);
+		resourcesLeft.put("arrowhead", 12);
+		resourcesLeft.put("jewel", 9);
 	}
 	
-	public int pickItemCard (int position) {		
-		int pickedCard = 0;
-		
-		if (itemCardRow.size() > 0) // Make sure Row Card exist before pick
-		{
-			pickedCard = itemCardRow.remove(position); // Remove card from pick position - gap will be filled by shifting of card from tail side			
-			if (itemCardDeck.size() > 0) // Make sure Deck Card exist before pick
-				itemCardRow.addLast(itemCardDeck.removeFirst()); // Get new card from Deck and add to tail
-		}
-		
-		return pickedCard;
-	}
-	
-	public int pickArtifactsCard (int position) {
-		int pickedCard = 0;
-		
-		if (artifactsCardRow.size() > 0) // Make sure Row Card exist before pick
-		{
-			pickedCard = artifactsCardRow.remove(position); // Remove card from pick position - gap will be filled by shifting of card from tail side			
-			if (artifactsCardDeck.size() > 0) // Make sure Deck Card exist before pick
-				artifactsCardRow.addLast(artifactsCardDeck.removeFirst()); // Get new card from Deck and add to tail
-		}
-		
-		return pickedCard;
+	public int resourceLeft(String resource)
+	{
+		return resourcesLeft.get(resource);
 	}
 	
 	public void addResource(String resource, int amount)
 	{
-		switch(resource)
-		{
-		case "coin":
-			numOfCoinLeft += amount;
-			break;
-		case "compass":
-			numOfCompassLeft += amount;
-			break;
-		case "tablet":
-			numOfTabletLeft += amount;
-			break;
-		case "arrowhead":
-			numOfArrowheadLeft += amount;
-		case "jewel":
-			numOfJewelLeft += amount;
-			break;
-		case "archaeologist":
-			numOfArchaeologistLeft += amount;
-		default:
-			break;
-		}
+		resourcesLeft.put(resource, resourcesLeft.get(resource) + amount);
 	}
 	
-	public void subtractResource(String resource, int amount)
+	public void addCard(String type, Card card)
 	{
-		switch(resource)
+		switch(type)
 		{
-		case "coin":
-			numOfCoinLeft -= amount;
-			break;
-		case "compass":
-			numOfCompassLeft -= amount;
-			break;
-		case "tablet":
-			numOfTabletLeft -= amount;
-			break;
-		case "arrowhead":
-			numOfArrowheadLeft -= amount;
-		case "jewel":
-			numOfJewelLeft -= amount;
-			break;
-		case "archaeologist":
-			numOfArchaeologistLeft -= amount;
+		case "item":
+			items.add(card);
+			return;
+		case "artifact":
+			artifacts.add(card);
+			return;
 		default:
-			break;
+			return;	
 		}
 	}
 	
-	public int getResource(String resource)
+	public void refillCardRow(int round)
 	{
-		switch(resource)
+		Random rand = new Random();
+		
+		for(int i = 0; i < cardRow.length; i++)
 		{
-		case "coin":
-			return numOfCoinLeft;
-		case "compass":
-			return numOfCompassLeft;
-		case "tablet":
-			return numOfTabletLeft;
-		case "arrowhead":
-			return numOfArrowheadLeft;
-		case "jewel":
-			return numOfJewelLeft;
-		case "archaeologist":
-			return numOfArchaeologistLeft;
-		default:
-			break;
+			if(cardRow[i] == null)
+			{
+				int cardPos;
+				
+				if(i < round)
+				{
+					cardPos = rand.nextInt(artifacts.size());
+					cardRow[i] = artifacts.get(cardPos);
+					artifacts.remove(cardPos);
+				}
+				else if(i >= round)
+				{
+					cardPos = rand.nextInt(items.size());
+					cardRow[i] = items.get(cardPos);
+					items.remove(cardPos);
+				}
+			}
 		}
-		return 0;
 	}
 	
-	public LinkedList<Integer> getItemCardDeck() {
-		return itemCardDeck;
+	public void removeCard(int i)
+	{
+		cardRow[i] = null;
 	}
 	
-	public LinkedList<Integer> getItemCardRow() {
-		return itemCardRow;
+	public Card cardAt(int i)
+	{
+		return cardRow[i];
 	}
 	
-	public LinkedList<Integer> getArtifactsCardDeck() {
-		return artifactsCardDeck;
+	public void addSite(int level, Site site)
+	{
+		
 	}
-	
-	public LinkedList<Integer> getArtifactsCardRow() {
-		return artifactsCardRow;
-	}
-	
-	
-	
-	
 }
