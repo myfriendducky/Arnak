@@ -1,22 +1,32 @@
-package arnak;
+package arnak_test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Site
 {
-	Player activePlayer;
+	String name;
 	
-	ArrayList<String> travelCost = new ArrayList<String>();
-	ArrayList<Player> occupyingPlayers = new ArrayList<Player>();
+	ArrayList<Map<String, Integer>> travelCost = new ArrayList<Map<String, Integer>>();
+	ArrayList<Player> players = new ArrayList<Player>();
 	
 	public Site()
 	{
 	}
 	
-	protected void addSpace(String cost)
+	public void setName(String newName)
 	{
-		travelCost.add(cost);
-		occupyingPlayers.add(null);
+		name = newName;
+	}
+	
+	public void addSpace(String cost, int amount)
+	{
+		Map<String, Integer> temp = new HashMap<String, Integer>();
+		temp.put(cost, amount);
+		
+		travelCost.add(temp);
+		players.add(null);
 	}
 	
 	public int maxSpace()
@@ -24,16 +34,13 @@ public class Site
 		return travelCost.size();
 	}
 	
-	public String getTravelCost()
+	public Map<String, Integer> getTravelCost()
 	{
-		if(numPlayer() < maxSpace())
+		for(int i = 0; i < maxSpace(); i++)
 		{
-			for(int i = 0; i < maxSpace(); i++)
+			if(players.get(i) == null)
 			{
-				if(occupyingPlayers.get(i) == null)
-				{
-					return travelCost.get(i);
-				}
+				return travelCost.get(i);
 			}
 		}
 		
@@ -42,44 +49,41 @@ public class Site
 	
 	public int numPlayer()
 	{
-		int playerCount = 0;
+		int temp = 0;
 		
-		for(int i = 0; i < occupyingPlayers.size(); i++)
+		for(int i = 0; i < players.size(); i++)
 		{
-			if(occupyingPlayers.get(i) != null)
+			if(players.get(i) != null)
 			{
-				playerCount++;
+				temp++;
 			}
 		}
 		
-		return playerCount;
+		return temp;
 	}
 	
 	public void addPlayer(Player player)
 	{
-		if(numPlayer() < maxSpace() && player.getResource("archaeologist") > 0)
-		{
-			activePlayer = player;
-			player.addResource("archaeologist", -1);
-			
-			for(int i = 0; i < numPlayer(); i++)
+		if(numPlayer() < maxSpace())
+		{	
+			for(int i = 0; i < maxSpace(); i++)
 			{
-				if(occupyingPlayers.get(i) == null)
+				if(players.get(i) == null)
 				{
-					occupyingPlayers.add(i, player);
+					players.set(i, player);
+					break;
 				}
 			}
 		}
 	}
 	
-	public void removePlayer(int i)
+	public void removePlayer(int target)
 	{
-		occupyingPlayers.get(i).addResource("archaeologist", 1);
-		occupyingPlayers.add(i, null);
+		players.set(target, null);
 	}
 	
-	public ArrayList<Player> getOccupyingPlayers()
+	public ArrayList<Player> getPlayers()
 	{
-		return occupyingPlayers;
+		return players;
 	}
 }
