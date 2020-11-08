@@ -1,42 +1,30 @@
-package arnak;
+package arnak_test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Card
 {
-	Player player;
+	Map<String, String> cardInfo = new HashMap<String, String>();
 	
-	String name;
-	String type;
-	String travelValue;
+	boolean free;
 	
-	boolean freeAction;
-	
-	public Card(Player owner)
+	public Card()
 	{
-		player = owner;
 	}
 	
-	public Player getOwner()
+	public String getInfo(String target)
 	{
-		return player;
+		return cardInfo.get(target);
 	}
 	
-	public String getName()
+	public void setInfo(String target, String result)
 	{
-		return name;
-	}
-	
-	public String getType()
-	{
-		return type;
-	}
-	
-	public String getTravelValue()
-	{
-		return travelValue;
+		cardInfo.put(target, result);
 	}
 	
 	public boolean isFree()
 	{
-		return freeAction;
+		return free;
 	}
 }
