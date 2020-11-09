@@ -14,8 +14,6 @@ public class Board
 	
 	Card cardRow[] = {null, null, null, null, null, null};
 	
-	ArrayList<ArrayList<Site>> sites = new ArrayList<ArrayList<Site>>();
-	
 	public Board()
 	{
 		resourcesLeft.put("coin", 27);
@@ -84,10 +82,5 @@ public class Board
 	public Card cardAt(int i)
 	{
 		return cardRow[i];
-	}
-	
-	public void addSite(int level, Site site)
-	{
-		
 	}
 }
