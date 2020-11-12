@@ -4,28 +4,20 @@ public class Card
 {
 	private Player player;
 	
-	String name;
 	String type;
 	String travelValue;
-	Effects effect;
+	String effect;
 	
 	boolean freeAction;
 	
-	public Card(Player owner, Effects effect )
+	public Card(String type, String travelValue, String effect, boolean freeAction )
 	{
-		this.player = owner;
+		this.type = type;
 		this.effect = effect;
-	}
+		this.travelValue = travelValue;
+		this.freeAction = freeAction;
+	}	
 	
-	public Player getOwner()
-	{
-		return player;
-	}
-	
-	public String getName()
-	{
-		return name;
-	}
 	
 	public String getType()
 	{
@@ -42,7 +34,7 @@ public class Card
 		return freeAction;
 	}
 	
-	public Effects getEffects() 
+	public String getEffect() 
 	{
 		return effect;
 	}
