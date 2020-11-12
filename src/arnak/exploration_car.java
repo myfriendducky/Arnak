@@ -2,9 +2,9 @@ package arnak;
 
 public class exploration_car extends Card
 {
-	public exploration_car(Player owner)
+	public exploration_car(Player owner, Effects effect)
 	{
-		super(owner);
+		super(owner, effect);
 		
 		name = "exploration";
 		type = "basic";

@@ -2,9 +2,9 @@ package arnak;
 
 public class funding_boat extends Card
 {
-	public funding_boat(Player owner)
+	public funding_boat(Player owner, Effects effect)
 	{
-		super(owner);
+		super(owner, effect);
 		
 		name = "funding";
 		type = "basic";

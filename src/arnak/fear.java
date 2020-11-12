@@ -2,9 +2,9 @@ package arnak;
 
 public class fear extends Card
 {
-	public fear(Player owner)
+	public fear(Player owner, Effects effect)
 	{
-		super(owner);
+		super(owner, effect);
 		
 		name = "fear";
 		type = "fear";

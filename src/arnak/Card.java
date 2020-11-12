@@ -4,10 +4,10 @@ public class Card
 {
 	private Player player;
 	
-	private String name;
-	private String type;
-	private String travelValue;
-	private Effects effect;
+	String name;
+	String type;
+	String travelValue;
+	Effects effect;
 	
 	boolean freeAction;
 	
