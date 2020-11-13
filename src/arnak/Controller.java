@@ -9,100 +9,115 @@ public class Controller
 	public Controller()
 	{
 		
-		// Setup Board
-		Board b = new Board();
+		// Setup Board and adding Site
+		Board board = new Board();
 		
-		// Menu for Number of Players selection
-	    System.out.println("============================");
-	    System.out.println("|   SELECT NO. OF PLAYERS   |");
-	    System.out.println("============================");
-	    System.out.println("|        1. Solo Mode       |");
-	    System.out.println("|        2. Dual Mode       |");
-	    System.out.println("|        3. Exit            |");
-	    System.out.println("============================");
-
-        Scanner in = new Scanner(System.in);
-        int swValue = in.nextInt();	   
-	    switch (swValue) {
-	    case 1:
-	    	System.out.print("Enter Player Name:"); 
-			in = new Scanner(System.in);
-			String playerName = in.nextLine();
-			
-		    Player soloPlayer = new Player (playerName, 1); // Setup Player
-		    setupCardForStart(soloPlayer); // Setup Card
-		    
-		    System.out.print("Enter Card Num to Discard:"); 
-			in = new Scanner(System.in);		
-			int cardToDiscard = in.nextInt();			
-			while (cardToDiscard  < 1 || cardToDiscard > soloPlayer.handSize()) {
-				  System.out.print("Invalid entry, try again!"); 
-				  in = new Scanner(System.in);		
-				  cardToDiscard = in.nextInt();	
-			}
-		    soloPlayer.discard(cardToDiscard - 1); //Adding 1 to adjust array index start - from 0
-	      
-		    break;
-	    case 2:
-	    	System.out.print("Enter First Player Name:"); 
-			in = new Scanner(System.in);
-			String firstPlayerName = in.nextLine();
-			
-			System.out.print("Enter Second Player Name:");
-			in = new Scanner(System.in);
-			String secondPlayerName = in.nextLine();
-			
-			// Setup Player
-			Player firstPlayer = new Player (firstPlayerName, 1);	
-			Player secondPlayer = new Player (secondPlayerName, 2);
-			
-			System.out.println(firstPlayerName);
-			System.out.println(secondPlayerName);
-	      break;
-	    case 3:
-	      System.out.println("Exit selected");
-	      break;
-	    default:
-	      System.out.println("Invalid selection");
-	    }	
-
-/*	
-		System.out.println("DECK");		
-		System.out.println("-----------------------------------");
-		for (int i = 0; i < Prabin.deck.size(); i++)
-			System.out.println(Prabin.deck.get(i).type);
-		System.out.println("");
-		System.out.println("");
+		Site site1 = new Site(1);
+		site1.addSpace("level1", 2);
+		//site1.addPlayer(new Player("takku"));		
+		board.addSite(new Site(1));
+		board.addSite(new Site(2));
+		board.addSite(new Site(3));
+		
+		// Initial Card setup for players
+		
+		Scanner in = new Scanner(System.in);
+    	System.out.print("Enter Player1 Name:"); 
+		in = new Scanner(System.in);
+		String firstPlayerName = in.nextLine();
+		
+	 	System.out.print("Enter Player2 Name:"); 
+		in = new Scanner(System.in);
+		String secondPlayerName = in.nextLine();		
 	
-		System.out.println("HAND");		
-		System.out.println("-----------------------------------");
-		
-		for (int i = 0; i < Prabin.hand.size(); i++)
-			System.out.println(Prabin.hand.get(i).type);
-		System.out.println("");
-		System.out.println("");
-		
-		System.out.println("PLAY AREA");	
-		System.out.println("-----------------------------------");
-		
-		for (int i = 0; i < Prabin.playArea.size(); i++)
-			System.out.println(Prabin.playArea.get(i).type);		
-	*/	
+	    Player firstPlayer = new Player (firstPlayerName);
+	    setupCardForPlayer(firstPlayer);
+	    Player secondPlayer = new Player (secondPlayerName);
+	    setupCardForPlayer(secondPlayer);	    
+	    
+	    // Games Starts
+	    while (true) {
+		    playGame(firstPlayer, board);
+		    playGame (secondPlayer, board);
+	    }
+
+	    
 	}
 	
-	public void setupCardForStart (Player p) {
+	public void setupCardForPlayer (Player p) {
 
+		Card a = new Card();
+		a.setOwner(p);
+		a.setInfo("effectID", "");
+		a.setInfo("Type", "Fear");
+		a.setInfo("travelValue", "Boot");
+		a.setFree(true);
+		
+		Card b = new Card();
+		b.setOwner(p);
+		b.setInfo("effectID", "");
+		b.setInfo("Type", "Fear");
+		b.setInfo("travelValue", "Boot");
+		b.setFree(true);
+		
+		Card c = new Card();
+		a.setOwner(p);
+		a.setInfo("effectID", "2 gold");
+		a.setInfo("Type", "Gold");
+		a.setInfo("travelValue", "Ship");
+		a.setFree(false);
+		
+		Card d = new Card();
+		b.setOwner(p);
+		b.setInfo("effectID", "2 gold");
+		b.setInfo("Type", "Gold");
+		b.setInfo("travelValue", "Ship");
+		b.setFree(false);
+		
+		Card e = new Card();
+		e.setOwner(p);
+		e.setInfo("effectID", "2 compass");
+		e.setInfo("Type", "Explore");
+		e.setInfo("travelValue", "Ship");
+		e.setFree(false);
+		
+		Card f = new Card();
+		f.setOwner(p);
+		f.setInfo("effectID", "2 compass");
+		f.setInfo("Type", "Explore");
+		f.setInfo("travelValue", "Ship");
+		f.setFree(false);
+		
+		
+		//p.addToDeck(card, position);
 		// Add Initial card to deck
-		p.addToDeck(new Card("Fear", "None", "Boot", true), "top");
-		p.addToDeck(new Card("Fear", "None", "Boot", true), "top");
-		p.addToDeck(new Card("Gold", "Gained 1 Golden coin", "Ship", false), "top");
-		p.addToDeck(new Card("Gold", "Gained 1 Golden coin", "Ship", false), "top");
-		p.addToDeck(new Card("Exploration", "Gain 1 Compass", "Ship", false), "top");
-		p.addToDeck(new Card("Exploration", "Gain 1 Compass", "Ship", false), "top");		
+		p.addToDeck(a, "top");
+		p.addToDeck(b, "top");
+		p.addToDeck(c, "top");
+		p.addToDeck(d, "top");
+		p.addToDeck(e, "top");
+		p.addToDeck(f, "top");
+		
 		
 		p.shuffle("deck"); // Shufftle deck		
 		p.draw(5); // Draw 5 card to the hand for start of game
 	
+	}
+	
+	public void playGame (Player player, Board board) 
+	{
+		System.out.print(player.getName() + " > Enter Card Num to Discard:"); 
+		Scanner in = new Scanner(System.in);
+		in = new Scanner(System.in);		
+		int cardToDiscard = in.nextInt();			
+		while (cardToDiscard  < 1 || cardToDiscard > player.sizeOf("hand")) {
+			  System.out.print("Invalid entry, try again!"); 
+			  in = new Scanner(System.in);		
+			  cardToDiscard = in.nextInt();	
+		}		    
+		Card discardCard = player.discard(cardToDiscard - 1); //Adjusting 1 for Array index start value
+	    discardCard.effect.resolveEffect("2 gold", player, board);	    
+	    View v = new View(player,board); // Update View
 	}
 	
 }

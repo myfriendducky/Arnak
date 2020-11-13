@@ -14,6 +14,8 @@ public class Board
 	
 	Card cardRow[] = {null, null, null, null, null, null};
 	
+	ArrayList<Site> sites = new ArrayList<Site>();
+	
 	public Board()
 	{
 		resourcesLeft.put("coin", 27);
@@ -31,6 +33,11 @@ public class Board
 	public void addResource(String resource, int amount)
 	{
 		resourcesLeft.put(resource, resourcesLeft.get(resource) + amount);
+	}
+	
+	public void subtractResource(String resource, int amount)
+	{
+		resourcesLeft.put(resource, resourcesLeft.get(resource) - amount);
 	}
 	
 	public void addCard(String type, Card card)
@@ -82,5 +89,15 @@ public class Board
 	public Card cardAt(int i)
 	{
 		return cardRow[i];
+	}
+	
+	public void addSite(Site site)
+	{
+		sites.add(site);
+	}
+	
+	public Site getSite(int i)
+	{
+		return sites.get(i);
 	}
 }

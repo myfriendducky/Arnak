@@ -1,85 +1,102 @@
 package arnak;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Site
 {
-	Player activePlayer;
+	int level;
 	
-	ArrayList<String> travelCost = new ArrayList<String>();
-	ArrayList<Player> occupyingPlayers = new ArrayList<Player>();
+	Board board;
 	
-	public Site()
+	Effect effect = new Effect();
+	String effectID;
+	
+	ArrayList<Map<String, Integer>> travelCost = new ArrayList<Map<String, Integer>>();
+	ArrayList<Player> players = new ArrayList<Player>();
+	
+	
+	public Site(int newLevel)
 	{
+		level = newLevel;
 	}
 	
-	protected void addSpace(String cost)
+	public void addSpace(String cost, int amount)
 	{
-		travelCost.add(cost);
-		occupyingPlayers.add(null);
+		Map<String, Integer> temp = new HashMap<String, Integer>();
+		temp.put(cost, amount);
+		travelCost.add(temp);
+		players.add(null);
 	}
 	
-	public int maxSpace()
+	public void setEffect(String effect)
 	{
-		return travelCost.size();
+		effectID = effect;
 	}
 	
-	public String getTravelCost()
+	public Map<String, Integer> getTravelCost()
 	{
-		if(numPlayer() < maxSpace())
+		if(numPlayer() >= travelCost.size())
 		{
-			for(int i = 0; i < maxSpace(); i++)
+			return null;
+		}
+		
+		int i = 0;
+		
+		while(i < travelCost.size() && players.get(i) != null)
+		{
+			i++;
+		}
+		
+		return travelCost.get(i);
+	}
+	
+	private int numPlayer()
+	{
+		int temp = 0;
+		
+		for(int i = 0; i < players.size(); i++)
+		{
+			if(players.get(i) != null)
 			{
-				if(occupyingPlayers.get(i) == null)
-				{
-					return travelCost.get(i);
-				}
+				temp++;
 			}
 		}
 		
-		return null;
-	}
-	
-	public int numPlayer()
-	{
-		int playerCount = 0;
-		
-		for(int i = 0; i < occupyingPlayers.size(); i++)
-		{
-			if(occupyingPlayers.get(i) != null)
-			{
-				playerCount++;
-			}
-		}
-		
-		return playerCount;
+		return temp;
 	}
 	
 	public void addPlayer(Player player)
 	{
-		if(numPlayer() < maxSpace() && player.getResource("archaeologist") > 0)
-		{
-			activePlayer = player;
-			player.addResource("archaeologist", -1);
-			
-			for(int i = 0; i < numPlayer(); i++)
-			{
-				if(occupyingPlayers.get(i) == null)
-				{
-					occupyingPlayers.add(i, player);
-				}
-			}
+		if(numPlayer() >= travelCost.size())
+		{	
+			return;
 		}
+		
+		int i = 0;
+		
+		while(i < players.size() && players.get(i) != null)
+		{
+			i++;
+		}
+		
+		players.set(i, player);
+		effect.resolveEffect(effectID, player, board);
 	}
 	
 	public void removePlayer(int i)
 	{
-		occupyingPlayers.get(i).addResource("archaeologist", 1);
-		occupyingPlayers.add(i, null);
+		players.set(i, null);
 	}
 	
-	public ArrayList<Player> getOccupyingPlayers()
+	public Player getPlayer(int i)
 	{
-		return occupyingPlayers;
+		return players.get(i);
+	}
+	
+	public int getLevel()
+	{
+		return level;
 	}
 }

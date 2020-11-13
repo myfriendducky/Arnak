@@ -2,36 +2,46 @@ package arnak;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Player
 {
+	String name;
+	
+	Map<String, Integer> resources = new HashMap<String, Integer>();
+	
 	ArrayList<Card> deck = new ArrayList<Card>();
 	ArrayList<Card> hand = new ArrayList<Card>();
 	ArrayList<Card> playArea = new ArrayList<Card>();
 	
-	String name;
-	int playOrder;
-	boolean hasPassed;
-	
-	int numCoin;
-	int numCompass;
-	int numTablet;
-	int numArrowhead;
-	int numJewel;
-	int numArchaeologist;
-	
-	public Player(String playerName, int order)
+	public Player(String newName)
 	{
-		name = playerName;
-		playOrder = order;
-		hasPassed = false;
+		name = newName;
 		
-		numCoin = 0;
-		numCompass = 0;
-		numTablet = 0;
-		numArrowhead = 0;
-		numJewel = 0;
-		numArchaeologist = 2;
+		resources.put("coin", 0);
+		resources.put("compass", 0);
+		resources.put("tablet", 0);
+		resources.put("arrowhead", 0);
+		resources.put("jewel", 0);
+		resources.put("archaeologist", 2);
+		resources.put("idolUnused", 0);
+		resources.put("idolUsed", 0);
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public int getResource(String resource)
+	{
+		return resources.get(resource);
+	}
+	
+	public void addResource(String resource, int amount)
+	{
+		resources.put(resource, resources.get(resource) + amount);
 	}
 	
 	public void addToDeck(Card card, String position)
@@ -72,101 +82,45 @@ public class Player
 	{
 		for(int i = 0; i < numCard; i++)
 		{
-			hand.add(deck.get(0));
+			addToHand(deck.get(0));
 			deck.remove(0);
 		}
 	}
 	
-	public void discard(int i)
+	public Card discard(int target)
 	{
-		playArea.add(hand.get(i));
-		hand.remove(i);
+		Card card = hand.get(target);
+		addToPlayArea(card);
+		hand.remove(target);
+		return card;
 	}
 	
-	public Card cardAt(int i)
+	public Card cardAt(int target)
 	{
-		return hand.get(i);
+		return hand.get(target);
 	}
 	
-	public int handSize()
+	public int sizeOf(String target)
 	{
-		return hand.size();
-	}
-	
-	public String getName()
-	{
-		return name;
-	}
-	
-	public int getPlayOrder()
-	{
-		return playOrder;
-	}
-	
-	public boolean hasPassed()
-	{
-		return hasPassed;
-	}
-	
-	public void passTurn()
-	{
-		hasPassed = true;
-	}
-	
-	public int getResource(String resource)
-	{
-		switch(resource)
+		switch(target)
 		{
-		case "coin":
-			return numCoin;
-		case "compass":
-			return numCompass;
-		case "tablet":
-			return numTablet;
-		case "arrowhead":
-			return numArrowhead;
-		case "jewel":
-			return numJewel;
-		case "archaeologist":
-			return numArchaeologist;
+		case "deck":
+			return deck.size();
+		case "hand":
+			return hand.size();
+		case "play area":
+			return playArea.size();
 		default:
-			break;
-		}
-		return 0;
-	}
-	
-	public void addResource(String resource, int amount)
-	{
-		switch(resource)
-		{
-		case "coin":
-			numCoin += amount;
-			break;
-		case "compass":
-			numCompass += amount;
-			break;
-		case "tablet":
-			numTablet += amount;
-			break;
-		case "arrowhead":
-			numArrowhead += amount;
-		case "jewel":
-			numJewel += amount;
-			break;
-		case "archaeologist":
-			numArchaeologist += amount;
-		default:
-			break;
+			return 0;
 		}
 	}
 	
-	public void cleanUp()
+	public void useIdol()
 	{
-		if(--playOrder <= 0)
+		if(getResource("idolUnused") > 0 && getResource("idolUsed") < 4)
 		{
-			playOrder = 4;
+			addResource("idolUnused", -1);
+			addResource("idolUsed", 1);
 		}
-		
-		hasPassed = false;
 	}
 }

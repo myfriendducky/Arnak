@@ -1,41 +1,49 @@
 package arnak;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Card
 {
-	private Player player;
+	Board board;
+	Player owner;
+	Effect effect = new Effect();
 	
-	String type;
-	String travelValue;
-	String effect;
+	Map<String, String> cardInfo = new HashMap<String, String>();
 	
-	boolean freeAction;
+	boolean free;
 	
-	public Card(String type, String travelValue, String effect, boolean freeAction )
+	public Card()
 	{
-		this.type = type;
-		this.effect = effect;
-		this.travelValue = travelValue;
-		this.freeAction = freeAction;
-	}	
-	
-	
-	public String getType()
-	{
-		return type;
 	}
 	
-	public String getTravelValue()
+	public void setOwner(Player player)
 	{
-		return travelValue;
+		owner = player;
+	}
+	
+	public String getInfo(String target)
+	{
+		return cardInfo.get(target);
+	}
+	
+	public void setInfo(String target, String result)
+	{
+		cardInfo.put(target, result);
 	}
 	
 	public boolean isFree()
 	{
-		return freeAction;
+		return free;
 	}
 	
-	public String getEffect() 
+	public void setFree(boolean flag) 
 	{
-		return effect;
+		free = flag;
+	}
+	
+	public void resolveEffect()
+	{
+		effect.resolveEffect(getInfo("effectID"), owner, board);
 	}
 }
