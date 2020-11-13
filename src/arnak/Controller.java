@@ -17,15 +17,7 @@ public class Controller
 			board.addCard("item", new Card());
 		for (int i = 0; i < 35; i++)
 			board.addCard("artifact", new Card());
-		board.refillCardRow(1);
-		
-		
-		Site site1 = new Site(1);
-		site1.addSpace("level1", 2);
-		//site1.addPlayer(new Player("takku"));		
-		board.addSite(new Site(1));
-		board.addSite(new Site(2));
-		board.addSite(new Site(3));
+		board.refillCardRow(1);		
 		
 		// Initial Card setup for players
 		
@@ -118,7 +110,7 @@ public class Controller
 		View v = new View(player,board); // Update View
 		System.out.println("");		
 		
-		System.out.print(player.getName() + " > Enter Card Num to Discard:"); 
+		System.out.print(player.getName() + " > Enter Card Num to Discard from HAND:"); 
 		Scanner in = new Scanner(System.in);
 		in = new Scanner(System.in);		
 		int cardToDiscard = in.nextInt();			
@@ -130,17 +122,23 @@ public class Controller
 		
 		Card discardCard = player.discard(cardToDiscard - 1); //Adjusting 1 for Array index start value
 		
-		System.out.println(player.getName() + "> Discarded card: " + discardCard.cardInfo.get("Type") + "\t" + discardCard.cardInfo.get("travelValue") + "\t" + discardCard.cardInfo.get("effectID")); 
+		System.out.println(player.getName() +  "'s " + "DISCARDED CARD");		
+		System.out.println("-----------------------------------");
+		System.out.println("TYPE\tTRAVEL\tEFFECT");
+		System.out.println("-----------------------------------");
+		System.out.println(discardCard.cardInfo.get("Type") + "\t" + discardCard.cardInfo.get("travelValue") + "\t" + discardCard.cardInfo.get("effectID"));
+		System.out.println("");
 		
 		// Effect option availalble only for card except Fear
 		if (discardCard.cardInfo.get("Type") != "Fear")
-			System.out.println("Select 1 for gaining: "+ discardCard.cardInfo.get("effectID"));
+			System.out.println(player.getName() + "> Select 1 for gaining: "+ discardCard.cardInfo.get("effectID"));
 		
-		System.out.println("Select 2 for Travel-Value of: "+ discardCard.cardInfo.get("travelValue"));
+		System.out.println(player.getName() + "> Select 2 for Travel-Value of: "+ discardCard.cardInfo.get("travelValue"));
 		
 		int cardOption = in.nextInt();
 		if (cardOption == 1)
-			discardCard.effect.resolveEffect(discardCard.getInfo("effectID"), player, board);	    
+			discardCard.effect.resolveEffect(discardCard.getInfo("effectID"), player, board);
+		
 	}
 	
 }
