@@ -1,6 +1,6 @@
 // stores and manipulates data related to the board
 
-package arnak_test;
+package arnak;
 
 import java.util.ArrayList;
 import java.util.HashMap;
