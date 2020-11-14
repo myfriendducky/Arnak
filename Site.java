@@ -13,7 +13,7 @@ public class Site
 	
 	Effect effect = new Effect();
 	String effectID;
-	ArrayList<Map<String, Integer>> playerLocation = new ArrayList<Map<String, Integer>>();
+	static ArrayList<Map<String, Integer>> playerLocation = new ArrayList<Map<String, Integer>>();
 	ArrayList<Map<String, Integer>> travelCost = new ArrayList<Map<String, Integer>>();
 	ArrayList<Player> players = new ArrayList<Player>();
 	
@@ -103,7 +103,7 @@ public class Site
 	// working on adding player location management so you can see players movement across the board
 	//first we need to be able to find the players location
 	
-	public void addLocation(String player, int location)
+	public static void addLocation(String player, int location)
 	{
 		
 		Map<String, Integer> temp = new HashMap<String, Integer>();

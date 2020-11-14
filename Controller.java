@@ -141,9 +141,11 @@ public class Controller
 			discardCard.effect.resolveEffect(discardCard.getInfo("effectID"), player, board);
 		
 	}
+	//confirm player wants to move then check player location then prompt a move
 	
-	public void moveSite(Player player)
+	public void moveSite(String player, int location)
 	{
+		Site n = new Site(location);
 		System.out.println("would you like to move your players location, y or n?");
 		Scanner scanner = new Scanner(System.in);
 		String move = scanner.next();
@@ -152,7 +154,14 @@ public class Controller
 			if (move == "y")
 				{
 					
+					System.out.println("would you like to move your players location, y or n?");
+					Scanner scan = new Scanner(System.in);
+					int moveLocal = scan.nextInt();
+					scan.close();
+					Site.addLocation(player, moveLocal);
+					return;
 				}
+			else return;
 	}
 			
 }
