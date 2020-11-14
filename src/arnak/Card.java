@@ -1,6 +1,6 @@
 // stores and manipulates data related to cards
 
-package arnak_test;
+package arnak;
 
 import java.util.HashMap;
 import java.util.Map;
