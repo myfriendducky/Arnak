@@ -1,6 +1,9 @@
 package arnak;
 
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Controller
 {
@@ -47,47 +50,58 @@ public class Controller
 	
 	public void setupCardForPlayer (Player p) {
 
+		Map<String, Integer> temp = new HashMap<String, Integer>();
+		
 		Card a = new Card();
 		a.setOwner(p);
 		a.setInfo("effectID", "none");
 		a.setInfo("Type", "Fear");
-		a.setInfo("travelValue", "Boot");
-		a.setFree(true);
+		temp.put("boot", 1);
+		a.setTravelCost(temp);
+		a.setToFree();
 		
 		Card b = new Card();
 		b.setOwner(p);
 		b.setInfo("effectID", "none");
 		b.setInfo("Type", "Fear");
-		b.setInfo("travelValue", "Boot");
-		b.setFree(true);
+		a.setTravelCost(temp);
+		a.setToFree();
 		
 		Card c = new Card();
 		c.setOwner(p);
 		c.setInfo("effectID", "3 gold");
 		c.setInfo("Type", "Gold");
-		c.setInfo("travelValue", "Ship");
-		c.setFree(false);
+		temp.clear();
+		temp.put("ship", 1);
+		a.setTravelCost(temp);
+		a.setToFree();
 		
 		Card d = new Card();
 		d.setOwner(p);
 		d.setInfo("effectID", "2 gold");
 		d.setInfo("Type", "Gold");
-		d.setInfo("travelValue", "Ship");
-		d.setFree(false);
+		temp.clear();
+		temp.put("ship", 1);
+		a.setTravelCost(temp);
+		a.setToFree();
 		
 		Card e = new Card();
 		e.setOwner(p);
 		e.setInfo("effectID", "2 compass");
 		e.setInfo("Type", "Explore");
-		e.setInfo("travelValue", "Ship");
-		e.setFree(false);
+		temp.clear();
+		temp.put("ship", 1);
+		a.setTravelCost(temp);
+		a.setToFree();
 		
 		Card f = new Card();
 		f.setOwner(p);
 		f.setInfo("effectID", "3 compass");
 		f.setInfo("Type", "Explore");
-		f.setInfo("travelValue", "Ship");
-		f.setFree(false);
+		temp.clear();
+		temp.put("ship", 1);
+		a.setTravelCost(temp);
+		a.setToFree();
 		
 		
 		//p.addToDeck(card, position);
@@ -141,4 +155,63 @@ public class Controller
 		
 	}
 	
+	public void digAtSite(Player player, Site site)
+	{	
+		Scanner in = new Scanner(System.in);
+		
+		String[] key = site.getTravelCost().keySet().toArray(new String[0]);
+		
+		System.out.println("The travel cost of this site is: " + site.getTravelCost().get(key[0]) + "x " + key[0]);
+		System.out.println("Here's your hand: ");
+		
+		for(int i = 0; i < player.sizeOf("hand"); i++)
+		{
+			System.out.print("[" + i + "] " + "[Name] " + player.cardAt("hand", i).getInfo("name"));
+			System.out.print("    [Type] " + player.cardAt("hand", i).getInfo("type"));
+			System.out.print("    [Travel cost] " + player.cardAt("hand", i).getInfo("travel cost"));
+			System.out.println();
+		}
+		
+		System.out.print("Enter the card number to use it for its travel cost, enter -1 to stop");
+		ArrayList<Integer> nums = new ArrayList<Integer>();
+		
+		int numEntered;
+		do
+		{
+			numEntered = in.nextInt();
+			
+			if(numEntered >= 0 && numEntered < player.sizeOf("hand"))
+			{
+				nums.add(numEntered);
+			}
+		}while(numEntered >= 0);
+		
+		int travelFund = 0;
+		for(int i = 0; i < nums.size(); i++)
+		{
+			if(player.cardAt("hand", nums.get(i)).getTravelCost().containsKey(key[0]))
+			{
+				travelFund += player.cardAt("hand", nums.get(i)).getTravelCost().get(key[0]);
+			}
+		}
+		
+		if(travelFund >= site.getTravelCost().get(key[0]))
+		{
+			System.out.println("The operation was legal, now I will discard all the cards at the indices you gave");
+			
+			for(int i = 0; i < nums.size(); i++)
+			{
+				player.discard(nums.get(i));
+			}
+		}
+		else
+		{
+			System.out.println("Sorry, looks like you can't go on the site with the cards entered");
+			return;
+		}
+		
+		player.addResource("archaelogist", -1);
+		site.addPlayer(player);
+		site.resolveEffect();
+	}
 }
