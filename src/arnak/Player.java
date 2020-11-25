@@ -98,10 +98,12 @@ public class Player
 	}
 	
 	// discards a card from the player's hand, depending on the index
-	public void discard(int index)
+	public Card discard(int target)
 	{
-		addToPlayArea(hand.get(index));
-		hand.remove(index);
+		Card card = hand.get(target);
+		addToPlayArea(card);
+		hand.remove(target);
+		return card;
 	}
 	
 	// gets a card from the player's deck, play area, or hand, depending on the index

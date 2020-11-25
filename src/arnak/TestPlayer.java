@@ -17,42 +17,38 @@ class TestPlayer {
 		a.setInfo("effectID", "none");
 		a.setInfo("Type", "Fear");
 		a.setInfo("travelValue", "Boot");
-		a.setFree(true);
+		a.setToFree();
 		
 		Card b = new Card();
 		b.setOwner(p);
 		b.setInfo("effectID", "none");
 		b.setInfo("Type", "Fear");
 		b.setInfo("travelValue", "Boot");
-		b.setFree(true);
+		b.setToFree();
 		
 		Card c = new Card();
 		c.setOwner(p);
 		c.setInfo("effectID", "3 gold");
 		c.setInfo("Type", "Gold");
 		c.setInfo("travelValue", "Ship");
-		c.setFree(false);
 		
 		Card d = new Card();
 		d.setOwner(p);
 		d.setInfo("effectID", "2 gold");
 		d.setInfo("Type", "Gold");
 		d.setInfo("travelValue", "Ship");
-		d.setFree(false);
 		
 		Card e = new Card();
 		e.setOwner(p);
 		e.setInfo("effectID", "2 compass");
 		e.setInfo("Type", "Explore");
 		e.setInfo("travelValue", "Ship");
-		e.setFree(false);
 		
 		Card f = new Card();
 		f.setOwner(p);
 		f.setInfo("effectID", "3 compass");
 		f.setInfo("Type", "Explore");
 		f.setInfo("travelValue", "Ship");
-		f.setFree(false);
 	
 
 		// Add Initial card to deck

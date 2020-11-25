@@ -15,6 +15,8 @@ public class Site
 	Effect effect = new Effect();
 	String effectID;
 	
+	Board board;
+	
 	ArrayList<Map<String, Integer>> travelCost = new ArrayList<Map<String, Integer>>();
 	ArrayList<Player> players = new ArrayList<Player>();
 	
@@ -115,7 +117,7 @@ public class Site
 	// resolves the effect tied to this site on the last player added to this site
 	public void resolveEffect()
 	{
-		effect.resolveEffect(effectID, activePlayer);
+		effect.resolveEffect(effectID, activePlayer, board);
 	}
 	
 	public boolean canAddPlayer()

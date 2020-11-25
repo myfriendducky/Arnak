@@ -9,6 +9,7 @@ public class Card
 {
 	Player owner;
 	Effect effect = new Effect();
+	Board board;
 	
 	Map<String, String> cardInfo = new HashMap<String, String>();
 	Map<String, Integer> travelCost = new HashMap<String, Integer>();
@@ -55,7 +56,7 @@ public class Card
 	// uses the effect this card is attached to
 	public void resolveEffect()
 	{
-		effect.resolveEffect(getInfo("effectID"), owner);
+		effect.resolveEffect(getInfo("effectID"), owner, board);
 	}
 	
 	public void setTravelCost(Map<String, Integer> newTravelCost)
