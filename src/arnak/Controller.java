@@ -50,58 +50,60 @@ public class Controller
 	
 	public void setupCardForPlayer (Player p) {
 
-		Map<String, Integer> temp = new HashMap<String, Integer>();
+		Map<String, Integer> travelCostA = new HashMap<String, Integer>();
+		Map<String, Integer> travelCostB = new HashMap<String, Integer>();
+		Map<String, Integer> travelCostC = new HashMap<String, Integer>();
+		Map<String, Integer> travelCostD = new HashMap<String, Integer>();
+		Map<String, Integer> travelCostE = new HashMap<String, Integer>();
+		Map<String, Integer> travelCostF = new HashMap<String, Integer>();
 		
 		Card a = new Card();
 		a.setOwner(p);
 		a.setInfo("effectID", "none");
 		a.setInfo("Type", "Fear");
-		temp.put("boot", 1);
-		a.setTravelCost(temp);
+		travelCostA.put("boot", 1);
+		a.setTravelCost(travelCostA);
 		a.setToFree();
 		
 		Card b = new Card();
 		b.setOwner(p);
 		b.setInfo("effectID", "none");
 		b.setInfo("Type", "Fear");
-		a.setTravelCost(temp);
-		a.setToFree();
+		travelCostB.put("boot", 1);
+		b.setTravelCost(travelCostB);
+		b.setToFree();
 		
 		Card c = new Card();
 		c.setOwner(p);
-		c.setInfo("effectID", "3 gold");
-		c.setInfo("Type", "Gold");
-		temp.clear();
-		temp.put("ship", 1);
-		a.setTravelCost(temp);
-		a.setToFree();
+		c.setInfo("effectID", "1 gold");
+		c.setInfo("Type", "Funding");
+		travelCostC.put("ship", 1);
+		c.setTravelCost(travelCostC);
+		c.setToFree();
 		
 		Card d = new Card();
 		d.setOwner(p);
-		d.setInfo("effectID", "2 gold");
-		d.setInfo("Type", "Gold");
-		temp.clear();
-		temp.put("ship", 1);
-		a.setTravelCost(temp);
-		a.setToFree();
+		d.setInfo("effectID", "1 gold");
+		d.setInfo("Type", "Funding");
+		travelCostD.put("plane", 1);
+		d.setTravelCost(travelCostD);
+		d.setToFree();
 		
 		Card e = new Card();
 		e.setOwner(p);
-		e.setInfo("effectID", "2 compass");
+		e.setInfo("effectID", "1 compass");
 		e.setInfo("Type", "Explore");
-		temp.clear();
-		temp.put("ship", 1);
-		a.setTravelCost(temp);
-		a.setToFree();
+		travelCostE.put("ship", 1);
+		e.setTravelCost(travelCostE);
+		e.setToFree();
 		
 		Card f = new Card();
 		f.setOwner(p);
-		f.setInfo("effectID", "3 compass");
+		f.setInfo("effectID", "1 compass");
 		f.setInfo("Type", "Explore");
-		temp.clear();
-		temp.put("ship", 1);
-		a.setTravelCost(temp);
-		a.setToFree();
+		travelCostF.put("plane", 1);
+		f.setTravelCost(travelCostF);
+		f.setToFree();
 		
 		
 		//p.addToDeck(card, position);
@@ -140,14 +142,19 @@ public class Controller
 		System.out.println("-----------------------------------");
 		System.out.println("TYPE\tTRAVEL\tEFFECT");
 		System.out.println("-----------------------------------");
-		System.out.println(discardCard.cardInfo.get("Type") + "\t" + discardCard.cardInfo.get("travelValue") + "\t" + discardCard.cardInfo.get("effectID"));
+		System.out.println(discardCard.cardInfo.get("Type") + "\t" + discardCard.getTravelCost().get("boat") + "\t" + discardCard.cardInfo.get("effectID"));
 		System.out.println("");
 		
 		// Effect option availalble only for card except Fear
 		if (discardCard.cardInfo.get("Type") != "Fear")
 			System.out.println(player.getName() + "> Select 1 for gaining: "+ discardCard.cardInfo.get("effectID"));
 		
-		System.out.println(player.getName() + "> Select 2 for Travel-Value of: "+ discardCard.cardInfo.get("travelValue"));
+		System.out.print(player.getName() + "> Select 2 for Travel-Value of:");
+		
+		// Accessing travelCost Map entry
+        for (Map.Entry<String,Integer> entry : discardCard.getTravelCost().entrySet())  
+            System.out.println(entry.getValue() + " " + entry.getKey()); 	
+		
 		
 		int cardOption = in.nextInt();
 		if (cardOption == 1)

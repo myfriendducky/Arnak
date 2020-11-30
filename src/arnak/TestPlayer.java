@@ -61,15 +61,13 @@ class TestPlayer {
 
 		p.shuffle("deck"); // Shufftle deck		
 		p.draw(5); // Draw 5 card to the hand for start of game
-		
-		
-		
+	
 		Assert.assertEquals(p.sizeOf("hand"), 5);
 		p.discard(1); // Discard 1st card out of 5 cards
 		Assert.assertEquals(p.sizeOf("hand"), 4);
 		p.discard(3); // Discard 3rd card out of 4 cards
 		Assert.assertEquals(p.sizeOf("hand"), 3);
-		
+				
 	}
 
 }

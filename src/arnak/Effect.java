@@ -10,27 +10,27 @@ public class Effect
 	{
 		switch(effectID)
 		{
-		case "2 gold":
+		case "1 gold":
 			String resource = "coin";
-			int amount = 2;
+			int amount = 1;
 			target.addResource(resource, amount);	
 			board.subtractResource(resource, amount);
 			break;			
-		case "2 compass":
+		case "1 compass":
 			resource = "compass";
+			amount = 1;
+			target.addResource(resource, amount);	
+			board.subtractResource(resource, amount);	
+			break;
+		case "2  jewels":
+			resource = "jewel";
 			amount = 2;
 			target.addResource(resource, amount);	
 			board.subtractResource(resource, amount);	
 			break;
-		case "3 compass":
-			resource = "compass";
-			amount = 3;
-			target.addResource(resource, amount);	
-			board.subtractResource(resource, amount);	
-			break;
-		case "3 gold":
-			resource = "coin";
-			amount = 3;
+		case "2 tablets":
+			resource = "tablet";
+			amount = 2;
 			target.addResource(resource, amount);	
 			board.subtractResource(resource, amount);	
 			break;

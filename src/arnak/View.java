@@ -1,5 +1,7 @@
 package arnak;
 
+import java.util.Map;
+
 public class View {
 	
 	public View(Player player, Board board) {
@@ -8,8 +10,17 @@ public class View {
 		System.out.println("-----------------------------------");
 		System.out.println("TYPE\tTRAVEL\tEFFECT");
 		System.out.println("-----------------------------------");
-		for (int i = 0; i < player.deck.size(); i++)
-			System.out.println(player.deck.get(i).cardInfo.get("Type") + "\t" + player.deck.get(i).cardInfo.get("travelValue") + "\t" + player.deck.get(i).cardInfo.get("effectID"));
+		for (int i = 0; i < player.deck.size(); i++) {			
+			
+			System.out.print(player.deck.get(i).cardInfo.get("Type") + "\t");
+			
+			// Accessing travelCost Map entry
+	        for (Map.Entry<String,Integer> entry : player.deck.get(i).getTravelCost().entrySet())  
+	            System.out.print(entry.getValue() + " " + entry.getKey()); 	
+	        
+	        System.out.println("\t"+ player.deck.get(i).cardInfo.get("effectID"));
+		}
+
 		System.out.println("");
 		System.out.println("");
 		
@@ -17,8 +28,17 @@ public class View {
 		System.out.println("-----------------------------------");
 		System.out.println("TYPE\tTRAVEL\tEFFECT");
 		System.out.println("-----------------------------------");
-		for (int i = 0; i < player.hand.size(); i++)
-			System.out.println(player.hand.get(i).cardInfo.get("Type") +  "\t" + player.hand.get(i).cardInfo.get("travelValue")  + "\t" + player.hand.get(i).cardInfo.get("effectID"));
+		
+		for (int i = 0; i < player.hand.size(); i++) {			
+			
+			System.out.print(player.hand.get(i).cardInfo.get("Type") + "\t");
+			
+			// Accessing travelCost Map entry
+	        for (Map.Entry<String,Integer> entry : player.hand.get(i).getTravelCost().entrySet())  
+	            System.out.print(entry.getValue() + " " + entry.getKey()); 	
+	        
+	        System.out.println("\t"+ player.hand.get(i).cardInfo.get("effectID"));
+		}
 		
 		System.out.println("");
 		System.out.println("");
