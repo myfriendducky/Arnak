@@ -15,15 +15,7 @@ public class Controller
 		// Setup Board and adding Site
 		Board board = new Board();
 		
-		// Adding items and artifacts card to board deck/row
-		for (int i = 0; i < 40; i++)
-			board.addCard("item", new Card());
-		for (int i = 0; i < 35; i++)
-			board.addCard("artifact", new Card());
-		board.refillCardRow(1);		
-		
-		// Initial Card setup for players
-		
+		// Initial Card setup for players		
 		Scanner in = new Scanner(System.in);
     	System.out.print("Enter Player1 Name:"); 
 		in = new Scanner(System.in);
@@ -124,7 +116,6 @@ public class Controller
 	public void playGame (Player player, Board board) 
 	{
 		View v = new View(player,board); // Update View
-		System.out.println("");		
 		
 		System.out.print(player.getName() + " > Enter Card Num to Discard from HAND:"); 
 		Scanner in = new Scanner(System.in);
@@ -134,31 +125,51 @@ public class Controller
 			  System.out.print("Invalid entry, try again!"); 
 			  in = new Scanner(System.in);		
 			  cardToDiscard = in.nextInt();	
-		}		    
-		
+		}
 		Card discardCard = player.discard(cardToDiscard - 1); //Adjusting 1 for Array index start value
 		
+		// showing DisCarded Card info
 		System.out.println(player.getName() +  "'s " + "DISCARDED CARD");		
 		System.out.println("-----------------------------------");
 		System.out.println("TYPE\tTRAVEL\tEFFECT");
-		System.out.println("-----------------------------------");
-		System.out.println(discardCard.cardInfo.get("Type") + "\t" + discardCard.getTravelCost().get("boat") + "\t" + discardCard.cardInfo.get("effectID"));
+		System.out.println("-----------------------------------");		
+		System.out.print(discardCard.cardInfo.get("Type") + "\t");		
+		// Accessing travelCost Map entry
+        for (Map.Entry<String,Integer> entry : discardCard.getTravelCost().entrySet())  
+            System.out.print(entry.getValue() + " " + entry.getKey()); 	        
+        System.out.println("\t"+ discardCard.cardInfo.get("effectID"));	
+		System.out.println("");
 		System.out.println("");
 		
 		// Effect option availalble only for card except Fear
 		if (discardCard.cardInfo.get("Type") != "Fear")
-			System.out.println(player.getName() + "> Select 1 for gaining: "+ discardCard.cardInfo.get("effectID"));
+			System.out.println(player.getName() + "> Select 1 to PLAY CARD for gaining "+ discardCard.cardInfo.get("effectID"));
 		
-		System.out.print(player.getName() + "> Select 2 for Travel-Value of:");
-		
-		// Accessing travelCost Map entry
+		System.out.print(player.getName() + "> Select 2 TO DIG A SITE with Travel-Value of ");		
+		// Printing Travel-value from Hash-Map
         for (Map.Entry<String,Integer> entry : discardCard.getTravelCost().entrySet())  
-            System.out.println(entry.getValue() + " " + entry.getKey()); 	
+            System.out.println(entry.getValue() + " " + entry.getKey()); 			
 		
-		
+        // Game Action Selection
 		int cardOption = in.nextInt();
-		if (cardOption == 1)
+		if (cardOption == 1) {
+			// Play A Card to resolve an effect
 			discardCard.effect.resolveEffect(discardCard.getInfo("effectID"), player, board);
+		}			
+		else if (cardOption == 2) {
+			// Dig A Site to resolve an effect
+			
+			// Setup Site
+			Site site = new Site(0);		
+			site.addSpace("boot", 1);
+			site.addSpace("boot", 2);
+			site.setEffect("2 jewels");
+			this.digAtSite(player, site);
+		}
+		else {
+			// Pass the turn
+			return;
+		}
 		
 	}
 	

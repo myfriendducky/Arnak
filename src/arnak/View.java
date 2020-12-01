@@ -47,8 +47,17 @@ public class View {
 		System.out.println("-----------------------------------");
 		System.out.println("TYPE\tTRAVEL\tEFFECT");
 		System.out.println("-----------------------------------");
-		for (int i = 0; i < player.playArea.size(); i++)
-			System.out.println(player.playArea.get(i).cardInfo.get("Type") + "\t" + player.playArea.get(i).cardInfo.get("travelValue") + "\t" + player.playArea.get(i).cardInfo.get("effectID"));
+		
+		for (int i = 0; i < player.playArea.size(); i++) {			
+			
+			System.out.print(player.playArea.get(i).cardInfo.get("Type") + "\t");
+			
+			// Accessing travelCost Map entry
+	        for (Map.Entry<String,Integer> entry : player.playArea.get(i).getTravelCost().entrySet())  
+	            System.out.print(entry.getValue() + " " + entry.getKey()); 	
+	        
+	        System.out.println("\t"+ player.playArea.get(i).cardInfo.get("effectID"));
+		}
 		
 		System.out.println("");
 		
@@ -71,6 +80,9 @@ public class View {
 		System.out.println("Arrowhead: " + board.resourceLeft("arrowhead"));
 		System.out.println("Jewel: " + board.resourceLeft("jewel"));
 		System.out.println("Tablet: " + board.resourceLeft("tablet"));
+		
+		System.out.println("");		
+		
 		
 		
 	
