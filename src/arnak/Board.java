@@ -44,7 +44,7 @@ public class Board
 		// left on the board
 		public void subtractResource(String resource, int amount)
 		{
-			resourcesLeft.put(resource, resourcesLeft.get(resource) + amount);
+			resourcesLeft.put(resource, resourcesLeft.get(resource) - amount);
 		}
 		
 	

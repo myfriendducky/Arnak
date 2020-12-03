@@ -55,15 +55,13 @@ public class Controller
 		a.setInfo("Type", "Fear");
 		travelCostA.put("boot", 1);
 		a.setTravelCost(travelCostA);
-		a.setToFree();
-		
+
 		Card b = new Card();
 		b.setOwner(p);
 		b.setInfo("effectID", "none");
 		b.setInfo("Type", "Fear");
 		travelCostB.put("boot", 1);
 		b.setTravelCost(travelCostB);
-		b.setToFree();
 		
 		Card c = new Card();
 		c.setOwner(p);
@@ -115,46 +113,22 @@ public class Controller
 	
 	public void playGame (Player player, Board board) 
 	{
-		View v = new View(player,board); // Update View
 		
-		System.out.print(player.getName() + " > Enter Card Num to Discard from HAND:"); 
+		System.out.print(player.getName() + " > 1) Play Card \t 2) Dig A Site \t 3) Pass :"); 
 		Scanner in = new Scanner(System.in);
-		in = new Scanner(System.in);		
-		int cardToDiscard = in.nextInt();			
-		while (cardToDiscard  < 1 || cardToDiscard > player.sizeOf("hand")) {
-			  System.out.print("Invalid entry, try again!"); 
-			  in = new Scanner(System.in);		
-			  cardToDiscard = in.nextInt();	
-		}
-		Card discardCard = player.discard(cardToDiscard - 1); //Adjusting 1 for Array index start value
+		Card discardedCard;
 		
-		// showing DisCarded Card info
-		System.out.println(player.getName() +  "'s " + "DISCARDED CARD");		
-		System.out.println("-----------------------------------");
-		System.out.println("TYPE\tTRAVEL\tEFFECT");
-		System.out.println("-----------------------------------");		
-		System.out.print(discardCard.cardInfo.get("Type") + "\t");		
-		// Accessing travelCost Map entry
-        for (Map.Entry<String,Integer> entry : discardCard.getTravelCost().entrySet())  
-            System.out.print(entry.getValue() + " " + entry.getKey()); 	        
-        System.out.println("\t"+ discardCard.cardInfo.get("effectID"));	
-		System.out.println("");
-		System.out.println("");
-		
-		// Effect option availalble only for card except Fear
-		if (discardCard.cardInfo.get("Type") != "Fear")
-			System.out.println(player.getName() + "> Select 1 to PLAY CARD for gaining "+ discardCard.cardInfo.get("effectID"));
-		
-		System.out.print(player.getName() + "> Select 2 TO DIG A SITE with Travel-Value of ");		
-		// Printing Travel-value from Hash-Map
-        for (Map.Entry<String,Integer> entry : discardCard.getTravelCost().entrySet())  
-            System.out.println(entry.getValue() + " " + entry.getKey()); 			
-		
-        // Game Action Selection
+		// Game Action Selection
 		int cardOption = in.nextInt();
-		if (cardOption == 1) {
+		if (cardOption == 1) {		
+			
 			// Play A Card to resolve an effect
-			discardCard.effect.resolveEffect(discardCard.getInfo("effectID"), player, board);
+			do { // Free Actions
+				discardedCard = discardCard(player, board);
+				discardedCard.effect.resolveEffect(discardedCard.getInfo("effectID"), player, board);
+				new View(player, board, "resources"); // Update View of Resource to show change of resolvedEffect
+			} while (discardedCard.free);
+
 		}			
 		else if (cardOption == 2) {
 			// Dig A Site to resolve an effect
@@ -163,14 +137,38 @@ public class Controller
 			Site site = new Site(0);		
 			site.addSpace("boot", 1);
 			site.addSpace("boot", 2);
-			site.setEffect("2 jewels");
-			this.digAtSite(player, site);
+			site.setEffect("2 jewels");			
+			
+			discardedCard = discardCard(player, board);
+			
+		//	if (site.canAddPlayer() && discardedCard.getTravelCost().get(key[0])) {
+				player.addResource("archaelogist", -1);
+				site.addPlayer(player);
+				site.resolveEffect();
+				new View(player, board, "resources");		
+				
+		//	}
+				
 		}
 		else {
 			// Pass the turn
 			return;
+		}				
+	}
+	
+	public Card discardCard (Player player, Board board) {
+		Scanner in = new Scanner(System.in);		
+		System.out.println("Enter Card index to Discard from HAND: ");
+		new View(player,board, "hand");
+		int cardToDiscard = in.nextInt();			
+		while (cardToDiscard  < 0 || cardToDiscard > player.sizeOf("hand") - 1) {
+			  System.out.print("Invalid entry, try again!"); 
+			  in = new Scanner(System.in);		
+			  cardToDiscard = in.nextInt();	
 		}
-		
+		Card discardedCard = player.discard(cardToDiscard);
+		new View(player, board, "playarea");
+		return discardedCard;		
 	}
 	
 	public void digAtSite(Player player, Site site)
@@ -185,8 +183,8 @@ public class Controller
 		for(int i = 0; i < player.sizeOf("hand"); i++)
 		{
 			System.out.print("[" + i + "] " + "[Name] " + player.cardAt("hand", i).getInfo("name"));
-			System.out.print("    [Type] " + player.cardAt("hand", i).getInfo("type"));
-			System.out.print("    [Travel cost] " + player.cardAt("hand", i).getInfo("travel cost"));
+			System.out.print("    [Type] " + player.cardAt("hand", i).getInfo("Type"));
+			System.out.print("    [Travel cost] " + player.cardAt("hand", i).getTravelCost().get(key[0]) + "x " + key[0]);
 			System.out.println();
 		}
 		
@@ -210,6 +208,7 @@ public class Controller
 			if(player.cardAt("hand", nums.get(i)).getTravelCost().containsKey(key[0]))
 			{
 				travelFund += player.cardAt("hand", nums.get(i)).getTravelCost().get(key[0]);
+				System.out.println(player.cardAt("hand", nums.get(i)).getTravelCost().get(key[0]));
 			}
 		}
 		
