@@ -42,6 +42,12 @@ public class Site
 		effectID = effect;
 	}
 	
+	// sets the effectID to the given String
+	public String getEffect()
+	{
+		return effectID;
+	}
+	
 	// gets the travel cost of the first empty space on the site as a Map
 	public Map<String, Integer> getTravelCost()
 	{

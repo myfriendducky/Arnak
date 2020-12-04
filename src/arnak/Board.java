@@ -41,12 +41,12 @@ public class Board
 	}
 	
 	// substracts an amount of the resource, given in String, to the total amount of that resource
-		// left on the board
-		public void subtractResource(String resource, int amount)
-		{
-			resourcesLeft.put(resource, resourcesLeft.get(resource) - amount);
-		}
-		
+	// left on the board
+	public void subtractResource(String resource, int amount)
+	{
+		resourcesLeft.put(resource, resourcesLeft.get(resource) - amount);
+	}
+	
 	
 	// adds the given card to either the artifact or the item deck
 	

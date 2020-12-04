@@ -22,7 +22,7 @@ public class Effect
 			target.addResource(resource, amount);	
 			board.subtractResource(resource, amount);	
 			break;
-		case "2  jewels":
+		case "2 jewels":
 			resource = "jewel";
 			amount = 2;
 			target.addResource(resource, amount);	

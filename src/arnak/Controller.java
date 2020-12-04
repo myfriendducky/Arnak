@@ -128,26 +128,38 @@ public class Controller
 				discardedCard.effect.resolveEffect(discardedCard.getInfo("effectID"), player, board);
 				new View(player, board, "resources"); // Update View of Resource to show change of resolvedEffect
 			} while (discardedCard.free);
-
-		}			
-		else if (cardOption == 2) {
-			// Dig A Site to resolve an effect
 			
+		} // Dig A Site to resolve an effect			
+		else if (cardOption == 2) {
+		
 			// Setup Site
 			Site site = new Site(0);		
 			site.addSpace("boot", 1);
-			site.addSpace("boot", 2);
-			site.setEffect("2 jewels");			
+			site.setEffect("2 jewels");						
+		
+			// Printing Site Cost Info
+			String[] keySite = site.getTravelCost().keySet().toArray(new String[0]);	
+			String siteTravelItem = keySite[0];
+			String siteEffect = site.getEffect();
+			int siteTravelCost = site.getTravelCost().get(siteTravelItem);
+			System.out.println();
+			System.out.println("The travel cost of this site is: " + siteTravelCost + " " + siteTravelItem);
+			System.out.println("You will gain " + siteEffect + " after as return" );
 			
 			discardedCard = discardCard(player, board);
+			String[] keyCard = discardedCard.getTravelCost().keySet().toArray(new String[0]);
+			String cardTravelItem = keyCard[0];
+			int cardTravelFund = discardedCard.getTravelCost().get(cardTravelItem);
 			
-		//	if (site.canAddPlayer() && discardedCard.getTravelCost().get(key[0])) {
-				player.addResource("archaelogist", -1);
+			if (site.canAddPlayer() && cardTravelFund >= siteTravelCost) {
+				player.addResource("archaeologist", -1);
 				site.addPlayer(player);
-				site.resolveEffect();
-				new View(player, board, "resources");		
+				site.effect.resolveEffect(site.getEffect(), player, board);
+				new View(player, board, "resources");				
+			} else {
 				
-		//	}
+				System.out.println("Sorry, looks like you can't go on the site with the cards entered");
+			}
 				
 		}
 		else {
@@ -158,6 +170,7 @@ public class Controller
 	
 	public Card discardCard (Player player, Board board) {
 		Scanner in = new Scanner(System.in);		
+		System.out.println();
 		System.out.println("Enter Card index to Discard from HAND: ");
 		new View(player,board, "hand");
 		int cardToDiscard = in.nextInt();			
@@ -169,66 +182,5 @@ public class Controller
 		Card discardedCard = player.discard(cardToDiscard);
 		new View(player, board, "playarea");
 		return discardedCard;		
-	}
-	
-	public void digAtSite(Player player, Site site)
-	{	
-		Scanner in = new Scanner(System.in);
-		
-		String[] key = site.getTravelCost().keySet().toArray(new String[0]);
-		
-		System.out.println("The travel cost of this site is: " + site.getTravelCost().get(key[0]) + "x " + key[0]);
-		System.out.println("Here's your hand: ");
-		
-		for(int i = 0; i < player.sizeOf("hand"); i++)
-		{
-			System.out.print("[" + i + "] " + "[Name] " + player.cardAt("hand", i).getInfo("name"));
-			System.out.print("    [Type] " + player.cardAt("hand", i).getInfo("Type"));
-			System.out.print("    [Travel cost] " + player.cardAt("hand", i).getTravelCost().get(key[0]) + "x " + key[0]);
-			System.out.println();
-		}
-		
-		System.out.print("Enter the card number to use it for its travel cost, enter -1 to stop");
-		ArrayList<Integer> nums = new ArrayList<Integer>();
-		
-		int numEntered;
-		do
-		{
-			numEntered = in.nextInt();
-			
-			if(numEntered >= 0 && numEntered < player.sizeOf("hand"))
-			{
-				nums.add(numEntered);
-			}
-		}while(numEntered >= 0);
-		
-		int travelFund = 0;
-		for(int i = 0; i < nums.size(); i++)
-		{
-			if(player.cardAt("hand", nums.get(i)).getTravelCost().containsKey(key[0]))
-			{
-				travelFund += player.cardAt("hand", nums.get(i)).getTravelCost().get(key[0]);
-				System.out.println(player.cardAt("hand", nums.get(i)).getTravelCost().get(key[0]));
-			}
-		}
-		
-		if(travelFund >= site.getTravelCost().get(key[0]))
-		{
-			System.out.println("The operation was legal, now I will discard all the cards at the indices you gave");
-			
-			for(int i = 0; i < nums.size(); i++)
-			{
-				player.discard(nums.get(i));
-			}
-		}
-		else
-		{
-			System.out.println("Sorry, looks like you can't go on the site with the cards entered");
-			return;
-		}
-		
-		player.addResource("archaelogist", -1);
-		site.addPlayer(player);
-		site.resolveEffect();
-	}
+	}	
 }
