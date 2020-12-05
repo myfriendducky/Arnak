@@ -8,6 +8,8 @@ import java.util.Map;
 public class Controller
 {
 
+	Card discardedCard;
+	Site site;
 	
 	public Controller()
 	{
@@ -32,7 +34,8 @@ public class Controller
 	    setupCardForPlayer(secondPlayer);	    
 	    
 		// Setup Site
-		Site site = new Site(0);		
+		site = new Site(0);		
+		site.addSpace("boot", 1);
 		site.addSpace("boot", 2);
 		site.setEffect("2 jewels");						
 	
@@ -121,55 +124,20 @@ public class Controller
 		
 		System.out.print(player.getName() + " > 1) Play Card \t 2) Dig A Site \t 3) Pass :"); 
 		Scanner in = new Scanner(System.in);
-		Card discardedCard;
 		
 		// Game Action Selection
 		int cardOption = in.nextInt();
 		if (cardOption == 1) {		
-			
-			// Play A Card to resolve an effect
-			do { // Free Actions
-				discardedCard = discardCard(player, board);
-				discardedCard.effect.resolveEffect(discardedCard.getInfo("effectID"), player, board);
-				new View(player, board, "resources"); // Update View of Resource to show change of resolvedEffect
-			} while (discardedCard.free);
-			
-		} // Dig A Site to resolve an effect			
+		
+			playCard(player, board);			
+		
+		} 
+		
+		// Dig A Site to resolve an effect			
 		else if (cardOption == 2) {		
-			if (site.canAddPlayer()) {
-				
-				// Printing Site Cost Info
-				String[] keySite = site.getTravelCost().keySet().toArray(new String[0]);	
-				String siteTravelItem = keySite[0];
-				String siteEffect = site.getEffect();
-				int siteTravelCost = site.getTravelCost().get(siteTravelItem);
-				System.out.println();
-				System.out.println("The travel cost of this site is: " + siteTravelCost + " " + siteTravelItem);
-				System.out.println("You will gain " + siteEffect + " after as return" );
-				
-				discardedCard = discardCard(player, board);
-				String[] keyCard = discardedCard.getTravelCost().keySet().toArray(new String[0]);
-				String cardTravelItem = keyCard[0];
-				int cardTravelFund = discardedCard.getTravelCost().get(cardTravelItem);
-				
-				if (cardTravelFund >= siteTravelCost) {
-					player.addResource("archaeologist", -1);
-					site.addPlayer(player);
-					site.effect.resolveEffect(site.getEffect(), player, board);
-					new View(player, board, "resources");				
-				} else {
-					
-					System.out.println("Sorry, looks like you can't go on the site with the cards entered");
-					player.Undiscard(discardedCard);// Discard card back to play area as travelFund is not sufficient
-				}
-			} else {
-				System.out.println("Sorry, this site is already occupied!");
-			}	
-			
-			new View(player, board, "playarea");
-			new View(player, board, "hand");
-				
+			digSite(site, player, board);
 		}
+		
 		else {
 			// Pass the turn
 			return;
@@ -190,4 +158,55 @@ public class Controller
 		Card discardedCard = player.discard(cardToDiscard);
 		return discardedCard;		
 	}	
+	
+	public void playCard(Player player, Board board) {
+		// Play A Card to resolve an effect
+		discardedCard = discardCard(player, board);
+		discardedCard.effect.resolveEffect(discardedCard.getInfo("effectID"), player, board);		
+		new View(player, board, "resources"); // Update View of Resource to show change of resolvedEffect
+		
+		// If card has free action, allow for next round
+		if (discardedCard.free)
+			playGame(player, board, site);
+	}
+	
+	public void digSite(Site site, Player player, Board board) {
+		
+		// Check if the site is occupied or not
+		if (site.canAddPlayer()) {
+			
+			// Printing Site Cost Info
+			String[] keySite = site.getTravelCost().keySet().toArray(new String[0]);	
+			String siteTravelItem = keySite[0];
+			String siteEffect = site.getEffect();
+			int siteTravelCost = site.getTravelCost().get(siteTravelItem);
+			System.out.println();
+			System.out.println("The travel cost of this site is: " + siteTravelCost + " " + siteTravelItem);
+			System.out.println("You will gain " + siteEffect + " after as return" );
+			
+			discardedCard = discardCard(player, board);
+			String[] keyCard = discardedCard.getTravelCost().keySet().toArray(new String[0]);
+			String cardTravelItem = keyCard[0];
+			int cardTravelFund = discardedCard.getTravelCost().get(cardTravelItem);
+			
+			// If travelFund is enough, dig a site to resovle an effect
+			if (cardTravelFund >= siteTravelCost) {
+				player.addResource("archaeologist", -1);
+				site.addPlayer(player);
+				site.effect.resolveEffect(site.getEffect(), player, board);
+				new View(player, board, "resources");
+				new View(player, board, "playarea");
+				new View(player, board, "hand");
+			
+			// If travel fund is not enough - give other option
+			} else {				
+				System.out.println("Sorry, looks like you can't go on the site with the cards entered");
+				player.Undiscard(discardedCard);// Discard card back to play area as travelFund is not sufficient
+				playGame(player, board, site); // Give option for alternate moves
+			}
+		} else {
+			System.out.println("Sorry, this site is already occupied!");
+			playGame(player, board, site); // Give option for alternate moves
+		}				
+	}
 }
