@@ -31,10 +31,16 @@ public class Controller
 	    Player secondPlayer = new Player (secondPlayerName);
 	    setupCardForPlayer(secondPlayer);	    
 	    
+		// Setup Site
+		Site site = new Site(0);		
+		site.addSpace("boot", 2);
+		site.setEffect("2 jewels");						
+	
+	    
 	    // Games Starts
 	    while (true) {
-		    playGame(firstPlayer, board);
-		    playGame (secondPlayer, board);
+		    playGame(firstPlayer, board, site);
+		    playGame (secondPlayer, board, site);
 	    }
 
 	    
@@ -53,7 +59,7 @@ public class Controller
 		a.setOwner(p);
 		a.setInfo("effectID", "none");
 		a.setInfo("Type", "Fear");
-		travelCostA.put("boot", 1);
+		travelCostA.put("boot", 3);
 		a.setTravelCost(travelCostA);
 
 		Card b = new Card();
@@ -103,15 +109,14 @@ public class Controller
 		p.addToDeck(c, "top");
 		p.addToDeck(d, "top");
 		p.addToDeck(e, "top");
-		p.addToDeck(f, "top");
-		
+		p.addToDeck(f, "top");		
 		
 		p.shuffle("deck"); // Shufftle deck		
-		p.draw(5); // Draw 5 card to the hand for start of game
+		p.draw(5); // Draw 5 card to the hand for start of game		
 	
 	}
 	
-	public void playGame (Player player, Board board) 
+	public void playGame (Player player, Board board, Site site) 
 	{
 		
 		System.out.print(player.getName() + " > 1) Play Card \t 2) Dig A Site \t 3) Pass :"); 
@@ -130,36 +135,39 @@ public class Controller
 			} while (discardedCard.free);
 			
 		} // Dig A Site to resolve an effect			
-		else if (cardOption == 2) {
-		
-			// Setup Site
-			Site site = new Site(0);		
-			site.addSpace("boot", 1);
-			site.setEffect("2 jewels");						
-		
-			// Printing Site Cost Info
-			String[] keySite = site.getTravelCost().keySet().toArray(new String[0]);	
-			String siteTravelItem = keySite[0];
-			String siteEffect = site.getEffect();
-			int siteTravelCost = site.getTravelCost().get(siteTravelItem);
-			System.out.println();
-			System.out.println("The travel cost of this site is: " + siteTravelCost + " " + siteTravelItem);
-			System.out.println("You will gain " + siteEffect + " after as return" );
-			
-			discardedCard = discardCard(player, board);
-			String[] keyCard = discardedCard.getTravelCost().keySet().toArray(new String[0]);
-			String cardTravelItem = keyCard[0];
-			int cardTravelFund = discardedCard.getTravelCost().get(cardTravelItem);
-			
-			if (site.canAddPlayer() && cardTravelFund >= siteTravelCost) {
-				player.addResource("archaeologist", -1);
-				site.addPlayer(player);
-				site.effect.resolveEffect(site.getEffect(), player, board);
-				new View(player, board, "resources");				
-			} else {
+		else if (cardOption == 2) {		
+			if (site.canAddPlayer()) {
 				
-				System.out.println("Sorry, looks like you can't go on the site with the cards entered");
-			}
+				// Printing Site Cost Info
+				String[] keySite = site.getTravelCost().keySet().toArray(new String[0]);	
+				String siteTravelItem = keySite[0];
+				String siteEffect = site.getEffect();
+				int siteTravelCost = site.getTravelCost().get(siteTravelItem);
+				System.out.println();
+				System.out.println("The travel cost of this site is: " + siteTravelCost + " " + siteTravelItem);
+				System.out.println("You will gain " + siteEffect + " after as return" );
+				
+				discardedCard = discardCard(player, board);
+				String[] keyCard = discardedCard.getTravelCost().keySet().toArray(new String[0]);
+				String cardTravelItem = keyCard[0];
+				int cardTravelFund = discardedCard.getTravelCost().get(cardTravelItem);
+				
+				if (cardTravelFund >= siteTravelCost) {
+					player.addResource("archaeologist", -1);
+					site.addPlayer(player);
+					site.effect.resolveEffect(site.getEffect(), player, board);
+					new View(player, board, "resources");				
+				} else {
+					
+					System.out.println("Sorry, looks like you can't go on the site with the cards entered");
+					player.Undiscard(discardedCard);// Discard card back to play area as travelFund is not sufficient
+				}
+			} else {
+				System.out.println("Sorry, this site is already occupied!");
+			}	
+			
+			new View(player, board, "playarea");
+			new View(player, board, "hand");
 				
 		}
 		else {
@@ -180,7 +188,6 @@ public class Controller
 			  cardToDiscard = in.nextInt();	
 		}
 		Card discardedCard = player.discard(cardToDiscard);
-		new View(player, board, "playarea");
 		return discardedCard;		
 	}	
 }

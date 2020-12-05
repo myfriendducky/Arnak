@@ -106,6 +106,14 @@ public class Player
 		return card;
 	}
 	
+	// Redo Discard from hand in case move is illegal
+	public void Undiscard(Card card)
+	{
+		playArea.remove(0);
+		hand.add(card);
+	}
+	
+	
 	// gets a card from the player's deck, play area, or hand, depending on the index
 	public Card cardAt(String target, int index)
 	{
