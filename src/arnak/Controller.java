@@ -166,7 +166,9 @@ public class Controller
 		new View(player, board, "resources"); // Update View of Resource to show change of resolvedEffect
 		
 		// If card has free action, allow for next round
-		if (discardedCard.free)
+		if (discardedCard.free) {
+			System.out.println("You just had free Action. You still have Main Action to take!");
+		}
 			playGame(player, board, site);
 	}
 	
