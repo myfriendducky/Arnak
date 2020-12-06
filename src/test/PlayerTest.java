@@ -19,8 +19,8 @@ class PlayerTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		player = new Player("player 1", 1);
-		cardOne = new Card(player);
-		cardTwo = new Card(player);
+		cardOne = new Card("Fear", "None", "Boot", true);
+		cardTwo = new Card("Fear", "None", "Boot", true);
 		player.addToHand(cardOne);
 		player.addToHand(cardTwo);
 	}

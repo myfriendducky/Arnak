@@ -4,12 +4,16 @@ public class Main
 {
 	public static void main(String[] args)
 	{
+		
+		
+		Controller c = new Controller();
 		//Player player = new Player("Bob", 1);
 		//funding_car a = new funding_car(player);
 		//System.out.println(a.getName());
 		//System.out.println(a.getType());
 		//System.out.println(a.getTravelValue());
 		
+		/*
 		Board c = new Board();
 		int b;
 		
@@ -51,6 +55,8 @@ public class Main
 		System.out.println();
 		System.out.println("Picked Card");
 		System.out.println(b);
+		
+		*/
 		
 
 

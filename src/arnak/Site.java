@@ -13,7 +13,7 @@ public class Site
 	{
 	}
 	
-	protected void addSpace(String cost)
+	public void addSpace(String cost)
 	{
 		travelCost.add(cost);
 		occupyingPlayers.add(null);

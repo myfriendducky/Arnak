@@ -2,28 +2,22 @@ package arnak;
 
 public class Card
 {
-	Player player;
+	private Player player;
 	
-	String name;
 	String type;
 	String travelValue;
+	String effect;
 	
 	boolean freeAction;
 	
-	public Card(Player owner)
+	public Card(String type, String travelValue, String effect, boolean freeAction )
 	{
-		player = owner;
-	}
+		this.type = type;
+		this.effect = effect;
+		this.travelValue = travelValue;
+		this.freeAction = freeAction;
+	}	
 	
-	public Player getOwner()
-	{
-		return player;
-	}
-	
-	public String getName()
-	{
-		return name;
-	}
 	
 	public String getType()
 	{
@@ -38,5 +32,10 @@ public class Card
 	public boolean isFree()
 	{
 		return freeAction;
+	}
+	
+	public String getEffect() 
+	{
+		return effect;
 	}
 }
